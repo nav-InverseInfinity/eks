@@ -1,0 +1,47 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: default
+spec:
+  # taints:
+  #   - key: example.com/special-taint
+  #     effect: NoSchedule
+  ttlSecondsAfterEmpty: 60 
+  ttlSecondsUntilExpired: 2592000 # 30 Days = 60 * 60 * 24 * 30 Seconds;
+  limits:
+    resources:
+      cpu: 50 # demo 10 CPU cores
+  requirements:
+    # instance families
+    - key: karpenter.k8s.aws/instance-family
+      operator: In
+      values: [t2]
+    # instance sizes
+    - key: karpenter.k8s.aws/instance-size
+      operator: In
+      values: [large]
+    # capacity type
+    - key: "karpenter.sh/capacity-type"
+      operator: In
+      values: ["on-demand"]
+      
+  provider:
+    instanceProfile: "KarpenterNodeInstanceProfile"
+    subnetSelector:
+      "kubernetes.io/cluster/dev-cluster": "owned" # cluster_name => dev-cluster
+    securityGroupSelector:
+      "kubernetes.io/cluster/dev-cluster": "owned"
+
+
+# ---
+# apiVersion: karpenter.k8s.aws/v1alpha1
+# kind: AWSNodeTemplate
+# metadata:
+#   name: default
+# spec:
+#   subnetSelector:
+#     kubernetes.io/cluster/dev-cluster: owned # cluster_name => dev-cluster
+#   # securityGroupSelector:
+#   #   kubernetes.io/cluster/dev-cluster: owned # cluster_name => dev-cluster
+#   securityGroupSelector:
+#     karpenter.sh/discovery: "dev-cluster"
