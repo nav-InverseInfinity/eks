@@ -1,15 +1,6 @@
 name: test
 on:
   workflow_dispatch:
-    inputs:
-      job:
-        description: "Job to run"
-        required: true
-        type: choice
-        options:
-          - "[deploy-1]"
-          - "[deploy-2]"
-          - "[deploy-3]"
 
 jobs:
   runner:
