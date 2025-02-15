@@ -1,0 +1,14 @@
+name: test
+on: push
+jobs:
+  runner:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: use-prod-secret
+        run: |
+          echo "Using prod secret - ${{ secrets.SECURITY_KEY }}"
+
+      - name: use-normal-secret
+        run: |
+          echo "Using normal secret - ${{ secrets.ORDINARY_SECRET }}"
