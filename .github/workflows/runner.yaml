@@ -9,6 +9,15 @@ jobs:
         run: |
           echo "Using prod secret - ${{ secrets.SECURITY_KEY }}"
 
+  ordinary:
+    runs-on: ubuntu-latest
+    steps:
       - name: use-normal-secret
         run: |
-          echo "Using normal secret - ${{ secrets.ORDINARY_SECRET }}"
+          cat <<EOF > test.sh
+          #!/bin/bash
+          pass=$1
+          echo "Using normal secret - $pass"
+          EOF
+          chmod +x test.sh
+          ./test.sh ${{ secrets.ORDINARY_SECRET }}
